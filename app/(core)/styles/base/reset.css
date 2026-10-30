@@ -1,0 +1,142 @@
+/* ============================================================================
+   RESET & ELEMENT DEFAULTS
+   ============================================================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Themed scrollbar — the page's own chrome, not the browser's grey default. */
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--accent-color), transparent 62%)
+    transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--accent-color), transparent 74%);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in oklab, var(--accent-color), transparent 52%);
+  background-clip: padding-box;
+}
+
+/* Text selection carries the accent instead of the OS highlight colour. */
+::selection {
+  background: color-mix(in oklab, var(--accent-color), transparent 68%);
+  color: var(--text-color);
+}
+
+/* Caret in every text field is the signal colour. */
+input,
+textarea,
+[contenteditable] {
+  caret-color: var(--accent-color);
+}
+
+body {
+  color: var(--text-color);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-gradient);
+  background-color: var(--bg-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text-color);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+hr {
+  border: 0;
+  margin-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: text-shadow 0.3s ease;
+}
+
+a:hover {
+  text-shadow: 0 0 8px var(--accent-color);
+}
+
+a > strong {
+  text-decoration: underline;
+}
+
+/* ----------------------------------------------------------------------------
+   Light theme: flatten the neon glow used by the dark theme
+   ---------------------------------------------------------------------------- */
+
+[data-theme="light"] body {
+  background: #ffffff;
+  background-color: #ffffff;
+}
+
+[data-theme="light"] main {
+  background-color: transparent;
+}
+
+[data-theme="light"] *[class*="glow"],
+[data-theme="light"] .btn-glow,
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] .page-404 h1,
+[data-theme="light"] .logo img,
+[data-theme="light"] .back-to-home__link,
+[data-theme="light"] .sim-field__label {
+  text-shadow: none !important;
+  box-shadow: none;
+}
+
+[data-theme="light"] a:hover {
+  text-shadow: none;
+}
+
+/* ----------------------------------------------------------------------------
+   Accessibility
+   ---------------------------------------------------------------------------- */
+
+*:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

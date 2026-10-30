@@ -1,0 +1,195 @@
+// app/(core)/components/LandingPart.jsx
+import React, { useState } from "react";
+import useTranslation from "../hooks/useTranslation.ts";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { motion, useReducedMotion } from "framer-motion";
+import Link from "next/link";
+import Popup from "./Popup";
+
+const containerVariants = (rm) => ({
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      delayChildren: rm ? 0.1 : 0.6,
+      staggerChildren: rm ? 0.08 : 0.25,
+    },
+  },
+});
+
+const fadeUp = (rm) => ({
+  hidden: { opacity: 0, y: rm ? 10 : 30 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: rm ? 0.5 : 1.2,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+});
+
+const buttonVariant = {
+  hidden: { opacity: 0, y: 24, scale: 0.96 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { type: "spring", stiffness: 90, damping: 16 },
+  },
+  hover: {
+    scale: 1.04,
+    boxShadow: "0 10px 30px rgba(0,0,0,0.18)",
+    transition: { duration: 0.25 },
+  },
+  tap: { scale: 0.98 },
+};
+
+// Config CTA
+const defaultCTAs = [
+  /* Example for CTAs: */
+  /*{
+    label: "Go to Simulations",
+    to: "/simulations",
+    type: "primary",
+    icon: faArrowRight
+    popup: { 
+      title: "New!",
+      description: "Check out our latest simulations added recently.",
+      buttons: [
+        {
+          label: "Join Discord",
+          onClick: () => {
+            window.open("https://discord.gg/hT68DTcwfD", "_blank");
+          },
+          type: "primary"
+        }
+      ]
+    }
+  },
+  {
+    label: "Contribute",
+    to: "/contribute",
+    type: "ghost",
+    icon: faGithub
+  }*/
+];
+
+const defaultStats = [
+  /* Example for Stats: */
+  /*{
+    label: "Chapters:",
+    value: "2",
+    icon: faListNumeric
+  }, */
+];
+
+export function LandingPart({
+  eyebrow = "",
+  title = "",
+  subtitle = "",
+  ctas = defaultCTAs,
+  ctaVariant = buttonVariant,
+  ctaGap = "1rem",
+  stats = defaultStats,
+}) {
+  const reduceMotion = useReducedMotion();
+  const [open, setOpen] = useState(false);
+  const { t, meta } = useTranslation();
+  const isCompleted = meta?.completed || false;
+
+  return (
+    <motion.div
+      className={`ph-hero__container ${isCompleted ? "notranslate" : ""}`}
+      variants={containerVariants(reduceMotion)}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.3 }}
+      style={{ position: "relative", overflow: "hidden" }}
+    >
+      {eyebrow && (
+        <motion.p className="ph-hero__eyebrow" variants={fadeUp(reduceMotion)}>
+          {eyebrow}
+        </motion.p>
+      )}
+
+      <motion.h2 className="ph-hero__title" variants={fadeUp(reduceMotion)}>
+        {t(title)}
+      </motion.h2>
+
+      <motion.p className="ph-hero__subtitle" variants={fadeUp(reduceMotion)}>
+        {t(subtitle)}
+      </motion.p>
+
+      <Popup
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        size="sm"
+        icon={ctas.find((cta) => cta.popup)?.icon}
+        popupContent={ctas.find((cta) => cta.popup)?.popup}
+      />
+
+      {/* CTA buttons */}
+      <motion.div
+        className="ph-hero__ctas"
+        style={{ display: "flex", gap: ctaGap }}
+        variants={fadeUp(reduceMotion)}
+      >
+        {ctas.map(({ label, to, type, icon, target, popup }, i) => {
+          const isExternal = /^https?:\/\//i.test(to) || to.startsWith("//");
+
+          return (
+            <motion.div
+              key={i}
+              variants={ctaVariant}
+              whileHover="hover"
+              whileTap="tap"
+              onClick={() => popup && setOpen(true)}
+            >
+              {isExternal ? (
+                <a
+                  href={to}
+                  className={`ph-btn ph-btn--${type}`}
+                  target={target || "_blank"}
+                  rel="noopener noreferrer"
+                >
+                  {t(label)}
+                  {icon && (
+                    <FontAwesomeIcon icon={icon} style={{ marginLeft: 8 }} />
+                  )}
+                </a>
+              ) : (
+                <Link
+                  className={`ph-btn ph-btn--${type}`}
+                  href={to}
+                  target={target}
+                >
+                  {t(label)}
+                  {icon && (
+                    <FontAwesomeIcon icon={icon} style={{ marginLeft: 8 }} />
+                  )}
+                </Link>
+              )}
+            </motion.div>
+          );
+        })}
+      </motion.div>
+
+      {/* Stats */}
+      <motion.div
+        className="ph-hero__stats"
+        role="list"
+        aria-label={t("Stats")}
+        variants={fadeUp(reduceMotion)}
+      >
+        {stats.map((stat, i) => (
+          <div className="ph-stat" role="listitem" key={i}>
+            <FontAwesomeIcon icon={stat.icon} />
+            <span className="ph-stat__label">{t(stat.label)}</span>
+            <span className="ph-stat__value">{t(stat.value)}</span>
+          </div>
+        ))}
+      </motion.div>
+    </motion.div>
+  );
+}

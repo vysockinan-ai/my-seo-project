@@ -1,0 +1,87 @@
+/* scripts/contributors/contributors.css */
+:root {
+  --contributors-per-row: 7;
+  --aspect-ratio: 2 / 2.5;
+}
+
+* {
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(var(--contributors-per-row), 1fr);
+  gap: 10px;
+  justify-items: center;
+}
+
+li {
+  width: 100%;
+  aspect-ratio: var(--aspect-ratio);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 8px;
+  border: 2px solid #00b8b8;
+  object-fit: cover;
+}
+
+h3 {
+  margin-top: 4px;
+  font-size: clamp(10px, 2vw, 12px);
+  text-align: center;
+  color: #d6d6d6;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+.item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+}
+.item > div {
+  border-radius: 5px;
+  padding: 4px;
+  text-align: center;
+  font-size: clamp(8px, 1.5vw, 10px);
+  font-weight: bold;
+  color: #ffffff;
+}
+.percentage {
+  background-color: #818181;
+}
+.commits {
+  background-color: #00b8b8;
+}
+.removed {
+  background-color: #b81900;
+}
+.added {
+  background-color: #03b800;
+}
