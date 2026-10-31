@@ -2,7 +2,10 @@
 import { useState, useEffect, useCallback } from "react";
 
 // Default language if no preference is set
-const DEFAULT_LANG = "en";
+export const DEFAULT_LANG = "ru";
+// Language the UI strings are written in (the keys of every locale file);
+// incomplete languages and load errors fall back to it.
+const SOURCE_LANG = "en";
 
 // Define the shape
 type Translations = Record<string, string>;
@@ -16,6 +19,7 @@ type MetaConfig = Record<string, LanguageMeta>;
 
 interface UseTranslationResult {
   t: (key: string) => string;
+  tn: (count: number, key: string) => string;
   ready: boolean;
   language: string;
   meta: LanguageMeta | null;
@@ -76,7 +80,7 @@ export const useTranslation = (lang?: string): UseTranslationResult => {
 
         const currentMeta = meta[language];
         // so that Google Translate can translate it normally.
-        const langToLoad = currentMeta?.completed ? language : DEFAULT_LANG;
+        const langToLoad = currentMeta?.completed ? language : SOURCE_LANG;
 
         const transModule = await import(`../locales/${langToLoad}.json`);
         // Spread into a new object so React always sees a new reference,
@@ -89,9 +93,7 @@ export const useTranslation = (lang?: string): UseTranslationResult => {
 
         // Fallback to English
         try {
-          const fallbackModule = await import(
-            `../locales/${DEFAULT_LANG}.json`
-          );
+          const fallbackModule = await import(`../locales/${SOURCE_LANG}.json`);
           setTranslations({ ...fallbackModule.default });
           setReady(true);
         } catch (e) {
@@ -132,8 +134,26 @@ export const useTranslation = (lang?: string): UseTranslationResult => {
     [translations]
   );
 
+  // Count-aware lookup: "5 simulations" needs a different noun form per
+  // number in languages like Russian. A locale opts in with `key#one`,
+  // `key#few`, `key#many`… entries (the Intl.PluralRules categories);
+  // without them this is just t(key).
+  const tn = useCallback(
+    (count: number, key: string): string => {
+      let category: string;
+      try {
+        category = new Intl.PluralRules(language).select(count);
+      } catch {
+        category = "other";
+      }
+      return translations[`${key}#${category}`] || t(key);
+    },
+    [translations, language, t]
+  );
+
   return {
     t,
+    tn,
     ready,
     language,
     meta: metaConfig ? metaConfig[language] : null,

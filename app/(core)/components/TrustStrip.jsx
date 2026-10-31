@@ -13,7 +13,7 @@ import useTranslation from "../hooks/useTranslation.ts";
 
 export default function TrustStrip() {
   const reduceMotion = useReducedMotion();
-  const { t, meta } = useTranslation();
+  const { t, tn, meta } = useTranslation();
   const isCompleted = meta?.completed || false;
 
   const total = Array.isArray(chapters) ? chapters.length : 0;
@@ -23,7 +23,7 @@ export default function TrustStrip() {
     { icon: faUserSlash, label: t("No login required") },
     { icon: faBan, label: t("No ads") },
     { icon: faCodeBranch, label: t("Open source") },
-    { icon: faCircleCheck, label: `${total} ${t("simulations")}` },
+    { icon: faCircleCheck, label: `${total} ${tn(total, "simulations")}` },
   ];
 
   return (

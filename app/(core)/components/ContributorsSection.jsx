@@ -15,7 +15,7 @@ export default function ContributorsSection() {
   // The header badge already fetched the head-count, so the title and the
   // placeholder grid can be sized before this list arrives.
   const { contributors: knownCount } = useRepoStats();
-  const { t, meta } = useTranslation();
+  const { t, tn, meta } = useTranslation();
   const isCompleted = meta?.completed || false;
 
   useEffect(() => {
@@ -79,7 +79,9 @@ export default function ContributorsSection() {
               </p>
               <p className="contributor-data">
                 {c.contributions}{" "}
-                {c.contributions === 1 ? t("commit") : t("commits")}
+                {c.contributions === 1
+                  ? tn(1, "commit")
+                  : tn(c.contributions, "commits")}
               </p>
             </div>
           </div>

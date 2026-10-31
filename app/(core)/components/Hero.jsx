@@ -45,12 +45,13 @@ export function Hero() {
   const isCompleted = meta?.completed || false;
 
   // Two sentences, one line each on desktop; the second carries the accent.
-  // A translation without "start" in it simply renders as one line group.
+  // A translation without "start" (or "начните") in it simply renders as one
+  // line group.
   const heading = t(
     "Stop memorizing physics formulas. Start visualizing them."
   );
   const words = heading.split(" ");
-  const accentFrom = words.findIndex((w) => /start/i.test(w));
+  const accentFrom = words.findIndex((w) => /start|начните/i.test(w));
   const lines =
     accentFrom > 0
       ? [

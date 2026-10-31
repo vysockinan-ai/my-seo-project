@@ -202,7 +202,7 @@ export function Search({
   sortOptions = SORT_OPTIONS,
 }) {
   const emit = onChange || onFilter;
-  const { t, meta } = useTranslation();
+  const { t, tn, meta } = useTranslation();
   const isCompleted = meta?.completed || false;
   const isMobile = useMobile();
   const { stages, ready: curriculumReady } = useCurriculum();
@@ -332,7 +332,8 @@ export function Search({
 
   const total = dataset.length;
   const shown = resultCount ?? total;
-  const noun = t(itemNoun);
+  // "12 / 20 simulations": the noun agrees with the last number.
+  const noun = tn(total, itemNoun);
   const countLabel =
     !hasAnyFilter || shown === total
       ? `${total} ${noun}`

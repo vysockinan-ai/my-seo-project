@@ -62,7 +62,7 @@ const textMatches = (f, text) =>
     .every((term) => SEARCH_INDEX[f.id].includes(term));
 
 export default function Formulary({ usage }) {
-  const { t, meta } = useTranslation();
+  const { t, tn, meta } = useTranslation();
   const isCompleted = meta?.completed || false;
   const { curriculumId } = useCurriculum();
   const [filter, setFilter] = useState(emptyFilter);
@@ -163,10 +163,10 @@ export default function Formulary({ usage }) {
         </p>
         <p className="formulary__stats">
           <span>
-            {formulas.length} {t("formulas")}
+            {formulas.length} {tn(formulas.length, "formulas")}
           </span>
           <span>
-            {DOMAINS.length} {t("domains")}
+            {DOMAINS.length} {tn(DOMAINS.length, "domains")}
           </span>
           <span>
             {withCalculator} {t("with a calculator")}

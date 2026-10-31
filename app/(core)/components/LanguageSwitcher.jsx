@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLanguage, faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import useTranslation from "../hooks/useTranslation.ts";
+import useTranslation, { DEFAULT_LANG } from "../hooks/useTranslation.ts";
 import meta from "../locales/meta.json";
 
 const LANGUAGES = Object.fromEntries(
@@ -11,7 +11,7 @@ const LANGUAGES = Object.fromEntries(
 );
 
 const getStoredLang = () => {
-  if (typeof document === "undefined") return "en";
+  if (typeof document === "undefined") return DEFAULT_LANG;
   const value = `; ${document.cookie}`;
   const parts = value.split("; googtrans=");
   if (parts.length === 2) {
@@ -23,7 +23,7 @@ const getStoredLang = () => {
       }
     }
   }
-  return "en";
+  return DEFAULT_LANG;
 };
 
 const setLangCookie = (languageCode) => {
@@ -36,7 +36,7 @@ const setLangCookie = (languageCode) => {
 export default function LanguageSwitcher() {
   const { t, meta } = useTranslation();
   const isCompleted = meta?.completed || false;
-  const [currentLanguage, setCurrentLanguage] = useState("en");
+  const [currentLanguage, setCurrentLanguage] = useState(DEFAULT_LANG);
   const [open, setOpen] = useState(false);
   const containerRef = useRef(null);
 

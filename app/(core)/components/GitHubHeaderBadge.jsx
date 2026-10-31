@@ -16,17 +16,17 @@ const ROTATE_INTERVAL_MS = 2600;
 export default function GitHubHeaderBadge({ mode }) {
   const stats = useRepoStats();
   const [messageIndex, setMessageIndex] = useState(0);
-  const { t } = useTranslation();
+  const { t, tn } = useTranslation();
 
   const messages = useMemo(
     () => [
-      stats.stars != null ? `${stats.stars} ${t("stars")}` : t("Open source"),
+      stats.stars != null ? `${stats.stars} ${tn(stats.stars, "stars")}` : t("Open source"),
       stats.contributors != null
-        ? `${stats.contributors} ${t("contributors")}`
+        ? `${stats.contributors} ${tn(stats.contributors, "contributors")}`
         : t("Built in public"),
       t("Star the repo"),
     ],
-    [stats, t]
+    [stats, t, tn]
   );
 
   useEffect(() => {
