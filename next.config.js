@@ -19,7 +19,8 @@ import packageJson from "./package.json" with { type: "json" };
 const shouldStaticExport = !existsSync(path.resolve("app/api"));
 
 const nextConfig = {
-  ...(shouldStaticExport ? { output: "export" } : {}),
+  output: 'export',
+  basePath: '/my-seo-project',
   env: {
     NEXT_PUBLIC_APP_VERSION: packageJson.version,
   },
@@ -27,5 +28,4 @@ const nextConfig = {
     unoptimized: true,
   },
 };
-
 export default nextConfig;
